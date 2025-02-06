@@ -1,7 +1,7 @@
 export interface IUsuario {
-    id: number;
-    first_name: string;
-    last_name: string;
+    idUsuario: number;
+    firstName: string;
+    lastName: string;
     username: string;
     email: string;
     image: string;

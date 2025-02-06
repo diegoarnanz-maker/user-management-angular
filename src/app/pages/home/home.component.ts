@@ -26,12 +26,12 @@ export class HomeComponent implements OnInit {
       next: (respuesta: IUsuarioResponse) => {
         this.usuarios = respuesta.results;
         this.totalPages = respuesta.total_pages;
+        // console.log('Usuarios:', this.usuarios);
       },
       error: (error) => {
         console.error('Error al obtener findAll:', error);
       },
     });
-    console.log('Usuarios:', this.usuarios);
   }
 
   cambiarPagina(siguiente: boolean): void {

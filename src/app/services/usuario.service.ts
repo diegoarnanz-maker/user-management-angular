@@ -8,36 +8,38 @@ import { IUsuario } from '../models/iusuario';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private apiUrl = 'https://peticiones.online/api/users';
+  private apiUrl = 'http://localhost:8080/api';
 
   constructor(private httpClient: HttpClient) {}
 
   // findAll() con paginacion incluida
   getUsuarios(page: number = 1): Observable<IUsuarioResponse> {
-    return this.httpClient.get<IUsuarioResponse>(`${this.apiUrl}?page=${page}`);
+    return this.httpClient.get<IUsuarioResponse>(
+      `${this.apiUrl}/home?page=${page}`
+    );
   }
 
-  // read(id)
-  getUsuarioById(id: number): Observable<IUsuario> {
-    console.log(`Obteniendo usuario con ID: ${id}`); // 🛠 Depuración
-    return this.httpClient.get<IUsuario>(`${this.apiUrl}/${id}`);
+  // read(_id)
+  getUsuarioById(idUsuario: number): Observable<IUsuario> {
+    return this.httpClient.get<IUsuario>(`${this.apiUrl}/user/${idUsuario}`);
   }
 
   // create(Usuario)
-  createUsuario(usuario: IUsuario): Observable<IUsuario> {
-    return this.httpClient.post<IUsuario>(this.apiUrl, usuario);
+  createUser(usuario: IUsuario): Observable<IUsuario> {
+    return this.httpClient.post<IUsuario>(`${this.apiUrl}/newuser`, usuario);
   }
 
   // update(Usuario)
   updateUsuario(usuario: IUsuario): Observable<IUsuario> {
     return this.httpClient.put<IUsuario>(
-      `${this.apiUrl}/${usuario.id}`,
+      `${this.apiUrl}/updateuser/${usuario.idUsuario}`,
       usuario
     );
   }
 
-  // delete(id)
-  deleteUsuario(id: number): Observable<IUsuario> {
-    return this.httpClient.delete<IUsuario>(`${this.apiUrl}/${id}`);
+  // delete(idUsuario)
+  deleteUsuario(idUsuario: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/deleteuser/${idUsuario}`);
   }
+  
 }
