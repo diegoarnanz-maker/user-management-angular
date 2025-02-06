@@ -6,12 +6,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule, 
+    RouterModule],
   templateUrl: './usuario-form.component.html',
   styleUrl: './usuario-form.component.css',
 })

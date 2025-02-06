@@ -2,40 +2,49 @@ import { Component, inject, Input } from '@angular/core';
 import { IUsuario } from '../../models/iusuario';
 import { Router, RouterLink } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuario-card',
   standalone: true,
-  imports: [
-    RouterLink
-  ],
+  imports: [RouterLink],
   templateUrl: './usuario-card.component.html',
-  styleUrl: './usuario-card.component.css'
+  styleUrl: './usuario-card.component.css',
 })
 export class UsuarioCardComponent {
   @Input() usuario!: IUsuario;
   @Input() detalle: boolean = false;
-  
+
   usuarioService = inject(UsuarioService);
   router = inject(Router);
 
   eliminarUsuario(idUsuario: number) {
-    if (confirm('¿Seguro que deseas eliminar este usuario?')) {
-      this.usuarioService.deleteUsuario(idUsuario).subscribe({
-        next: () => {
-          console.log('Usuario eliminado correctamente');
-          alert('Usuario eliminado con éxito');
-          this.router.navigate(['/home']).then(() => {
-            window.location.reload(); // Fuerza la recarga de la página
-          });          
-        },
-        error: (error) => {
-          console.error('Error al eliminar usuario:', error);
-          alert('Hubo un error al eliminar el usuario');
-        },
-      });
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--danger)',
+      cancelButtonColor: 'var(--secondary)',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioService.deleteUsuario(idUsuario).subscribe({
+          next: () => {
+            Swal.fire('Eliminado', 'El usuario ha sido eliminado.', 'success');
+            this.router.navigate(['/home']);
+          },
+          error: (error) => {
+            console.error('Error al eliminar usuario:', error);
+            Swal.fire(
+              'Error',
+              'Hubo un problema al eliminar el usuario.',
+              'error'
+            );
+          },
+        });
+      }
+    });
   }
-  
-
 }

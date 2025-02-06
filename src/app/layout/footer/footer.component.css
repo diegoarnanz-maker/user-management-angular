@@ -1,0 +1,13 @@
+.footer-custom {
+    background-color: var(--dark);
+    color: var(--light);
+  }
+  
+  .footer-link {
+    color: var(--light);
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
