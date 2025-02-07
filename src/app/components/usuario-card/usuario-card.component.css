@@ -1,58 +1,57 @@
 .usuario-card {
-    background-color: var(--card-background);
-    border-color: var(--light);
-  }
-  
-  .usuario-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 2px solid var(--primary);
-  }
-  
-  .usuario-title {
-    color: var(--primary);
-  }
-  
-  .usuario-btn-view {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
-  }
-  
-  .usuario-btn-edit {
-    background-color: var(--warning);
-    border-color: var(--warning);
-    color: #333;
-  }
-  
-  .usuario-btn-delete {
-    background-color: var(--danger);
-    border-color: var(--danger);
-    color: #fff;
-  }
-  
-  .usuario-text-dark {
-    color: var(--dark);
-  }
-  
-  .usuario-text-primary {
-    color: var(--primary);
-  }
-  
-  .usuario-text-success {
-    color: var(--success);
-  }
-  
-  .usuario-text-warning {
-    color: var(--warning);
-  }
-  
-  .usuario-text-danger {
-    color: var(--danger);
-  }
-  
-  .usuario-text-secondary {
-    color: var(--secondary);
-  }
-  
+  background-color: var(--card-background);
+  border-color: var(--light);
+}
+
+.usuario-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+
+.usuario-title {
+  color: var(--primary);
+}
+
+.usuario-btn-view {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.usuario-btn-edit {
+  background-color: var(--warning);
+  border-color: var(--warning);
+  color: #333;
+}
+
+.usuario-btn-delete {
+  background-color: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+.usuario-text-dark {
+  color: var(--dark);
+}
+
+.usuario-text-primary {
+  color: var(--primary);
+}
+
+.usuario-text-success {
+  color: var(--success);
+}
+
+.usuario-text-warning {
+  color: var(--warning);
+}
+
+.usuario-text-danger {
+  color: var(--danger);
+}
+
+.usuario-text-secondary {
+  color: var(--secondary);
+}

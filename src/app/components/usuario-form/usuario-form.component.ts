@@ -7,13 +7,12 @@ import {
 } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule, 
-    RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './usuario-form.component.html',
   styleUrl: './usuario-form.component.css',
 })
@@ -73,31 +72,51 @@ export class UsuarioFormComponent {
     const usuario = this.addUserForm.value;
 
     if (this.idUsuario) {
-      // Si existe idUsuario, actualizamos el usuario
       usuario.idUsuario = this.idUsuario;
 
       this.usuarioService.updateUsuario(usuario).subscribe({
         next: (response) => {
           console.log('Usuario actualizado:', response);
-          alert('Usuario actualizado con éxito');
-          this.router.navigate(['/home']);
+          Swal.fire({
+            title: 'Actualizado',
+            text: 'El usuario ha sido actualizado con éxito.',
+            icon: 'success',
+            confirmButtonColor: 'var(--secondary)',
+          }).then(() => {
+            this.router.navigate(['/home']);
+          });
         },
         error: (error) => {
           console.error('Error al actualizar usuario:', error);
-          alert('Hubo un error al actualizar el usuario');
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al actualizar el usuario.',
+            icon: 'error',
+            confirmButtonColor: 'var(--danger)',
+          });
         },
       });
     } else {
-      // Si no existe idUsuario, creamos un nuevo usuario
       this.usuarioService.createUser(usuario).subscribe({
         next: (response) => {
           console.log('Usuario creado:', response);
-          alert('Usuario creado con éxito');
-          this.router.navigate(['/home']);
+          Swal.fire({
+            title: 'Creado',
+            text: 'El usuario ha sido creado con éxito.',
+            icon: 'success',
+            confirmButtonColor: 'var(--secondary)',
+          }).then(() => {
+            this.router.navigate(['/home']);
+          });
         },
         error: (error) => {
           console.error('Error al crear usuario:', error);
-          alert('Hubo un error al crear el usuario');
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al crear el usuario.',
+            icon: 'error',
+            confirmButtonColor: 'var(--danger)',
+          });
         },
       });
     }

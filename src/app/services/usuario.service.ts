@@ -12,14 +12,14 @@ export class UsuarioService {
 
   constructor(private httpClient: HttpClient) {}
 
-  // findAll() con paginacion incluida
+  // findAll() con paginacion
   getUsuarios(page: number = 1): Observable<IUsuarioResponse> {
     return this.httpClient.get<IUsuarioResponse>(
       `${this.apiUrl}/home?page=${page}`
     );
   }
 
-  // read(_id)
+  // read(id)
   getUsuarioById(idUsuario: number): Observable<IUsuario> {
     return this.httpClient.get<IUsuario>(`${this.apiUrl}/user/${idUsuario}`);
   }
