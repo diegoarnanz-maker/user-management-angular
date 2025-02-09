@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { UsuarioDetailComponent } from './pages/usuario-detail/usuario-detail.component';
-import { UsuarioFormComponent } from './components/usuario-form/usuario-form.component';
 import { NewUserComponent } from './pages/new-user/new-user.component';
 import { UpdateUserComponent } from './pages/update-user/update-user.component';
+import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
     {
@@ -12,20 +14,27 @@ export const routes: Routes = [
         redirectTo: 'home'
     },
     {
+        path: 'login',
+        component: LoginComponent
+    },
+    {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
+        canActivate: [authGuard]
     },
     {
         path: 'newuser',
-        component: NewUserComponent
+        component: NewUserComponent,
+        canActivate: [authGuard, adminGuard]
     },
     {
         path: 'updateuser/:idUsuario',
-        component: UpdateUserComponent
+        component: UpdateUserComponent,
+        canActivate: [authGuard, adminGuard]
     },
     {
         path: 'user/:idUsuario',
-        component: UsuarioDetailComponent
+        component: UsuarioDetailComponent,
+        canActivate: [authGuard]
     }
-    
 ];
