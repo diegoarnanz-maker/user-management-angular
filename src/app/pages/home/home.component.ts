@@ -13,8 +13,9 @@ import { IUsuarioResponse } from '../../models/iusuario-response';
 })
 export class HomeComponent implements OnInit {
   usuarios: IUsuario[] = [];
-  page: number = 1;
+  page: number = 0;
   totalPages: number = 1;
+  perPage: number = 9;
   usuarioService = inject(UsuarioService);
 
   ngOnInit(): void {
@@ -22,31 +23,25 @@ export class HomeComponent implements OnInit {
   }
 
   getUsuarios(): void {
-    this.usuarioService.getUsuarios().subscribe({
-      next: (response) => {
-        console.log("✅ Usuarios recibidos en Angular:", response);
+    this.usuarioService.getUsuarios(this.page, this.perPage).subscribe({
+      next: (response: IUsuarioResponse) => {
+        console.log('Usuarios recibidos en Angular:', response);
         this.usuarios = response.results;
+        this.totalPages = response.total_pages;
       },
       error: (error) => {
-        console.error("❌ Error al obtener usuarios:", error);
-      }
+        console.error('Error al obtener usuarios:', error);
+      },
     });
   }
 
   cambiarPagina(siguiente: boolean): void {
-    if (siguiente && this.page < this.totalPages) {
+    if (siguiente && this.page < this.totalPages - 1) {
       this.page++;
-    } else if (!siguiente && this.page > 1) {
+    } else if (!siguiente && this.page > 0) {
       this.page--;
     }
-    this.usuarioService.getUsuarios(this.page).subscribe({
-      next: (respuesta: IUsuarioResponse) => {
-        this.usuarios = respuesta.results;
-        this.totalPages = respuesta.total_pages;
-      },
-      error: (error) => {
-        console.error('Error al obtener findAll:', error);
-      },
-    });
+
+    this.getUsuarios();
   }
 }

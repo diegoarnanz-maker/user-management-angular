@@ -18,8 +18,35 @@
 }
 
 .border-color {
-  border: 2px solid var(--light);
+  border: 1px solid var(--light);
   border-radius: 8px;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
+.user-info {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 6px 12px;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.username-text {
+  color: var(--light);
+  font-weight: 600;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.logout-text {
+  color: var(--danger);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logout-text:hover {
+  color: var(--warning);
+}

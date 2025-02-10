@@ -9,28 +9,27 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         
-        <li class="nav-item">
-          <a class="nav-link navbar-text fw-semibold px-3" routerLink="/home" routerLinkActive="active">Home</a>
-        </li>
-
         @if (authService.getUserRole() === 'ROLE_ADMIN') {
           <li class="nav-item">
             <a class="nav-link navbar-text fw-semibold px-3" routerLink="/newuser">Nuevo Usuario</a>
           </li>
         }
 
-        @if (authService.isAuthenticated()) {
-          <li class="nav-item">
-            <a class="nav-link navbar-text fw-semibold px-3" (click)="logout()">Cerrar sesión</a>
-          </li>
-        } @else {
-
+        @if (!authService.isAuthenticated()) {
           <li class="nav-item">
             <a class="nav-link navbar-text fw-semibold px-3" routerLink="/login">Iniciar sesión</a>
           </li>
         }
-        
       </ul>
+
+      @if (authService.isAuthenticated()) {
+        <div class="user-info px-3 py-1 rounded">
+          <span class="navbar-text fw-semibold username-text">
+            {{ authService.getUsername() | uppercase }} |
+          </span>
+          <a class="nav-link fw-semibold logout-text" (click)="logout()"> Cerrar sesión</a>
+        </div>
+      }
     </div>
   </div>
 </nav>

@@ -7,13 +7,12 @@ import {
 } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule, 
-    RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './usuario-form.component.html',
   styleUrl: './usuario-form.component.css',
 })
@@ -34,6 +33,10 @@ export class UsuarioFormComponent {
         Validators.minLength(4),
         Validators.pattern('^[a-zA-Z0-9._-]+$'),
       ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
       firstName: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
@@ -46,6 +49,7 @@ export class UsuarioFormComponent {
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       image: new FormControl('', [Validators.required]),
+      role: new FormControl('', [Validators.required]),
     });
 
     //Busco si hay id en la URL para poder pasar los datos en caso de ser updateuser
@@ -70,34 +74,65 @@ export class UsuarioFormComponent {
       return;
     }
 
-    const usuario = this.addUserForm.value;
+    let usuario = { ...this.addUserForm.value };
+
+    if (usuario.role) {
+      usuario.roles = [usuario.role];
+      delete usuario.role;
+    } else {
+      usuario.roles = [];
+    }
+
+    // console.log('Datos enviados al backend:', usuario);
 
     if (this.idUsuario) {
-      // Si existe idUsuario, actualizamos el usuario
       usuario.idUsuario = this.idUsuario;
-
       this.usuarioService.updateUsuario(usuario).subscribe({
         next: (response) => {
-          console.log('Usuario actualizado:', response);
-          alert('Usuario actualizado con éxito');
-          this.router.navigate(['/home']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuario actualizado',
+            text: 'El usuario ha sido actualizado con éxito.',
+            confirmButtonColor: 'var(--secondary)',
+            confirmButtonText: 'Aceptar',
+          }).then(() => {
+            this.router.navigate(['/home']);
+          });
         },
         error: (error) => {
           console.error('Error al actualizar usuario:', error);
-          alert('Hubo un error al actualizar el usuario');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al actualizar el usuario.',
+            confirmButtonColor: 'var(--danger)',
+            confirmButtonText: 'Aceptar',
+          });
         },
       });
     } else {
-      // Si no existe idUsuario, creamos un nuevo usuario
       this.usuarioService.createUser(usuario).subscribe({
         next: (response) => {
           console.log('Usuario creado:', response);
-          alert('Usuario creado con éxito');
-          this.router.navigate(['/home']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuario creado',
+            text: 'El usuario ha sido creado con éxito.',
+            confirmButtonColor: 'var(--secondary)',
+            confirmButtonText: 'Aceptar',
+          }).then(() => {
+            this.router.navigate(['/home']);
+          });
         },
         error: (error) => {
           console.error('Error al crear usuario:', error);
-          alert('Hubo un error al crear el usuario');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al crear el usuario.',
+            confirmButtonColor: 'var(--danger)',
+            confirmButtonText: 'Aceptar',
+          });
         },
       });
     }

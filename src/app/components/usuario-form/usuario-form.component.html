@@ -13,6 +13,32 @@
       </div>
 
       <div class="mb-3">
+        <label for="password" class="form-label fw-bold">Contraseña</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          id="password" 
+          formControlName="password"
+          placeholder="Introduce la contraseña"
+        >
+      
+        @if (addUserForm.controls['password'].invalid && addUserForm.controls['password'].touched) {
+          <div class="text-danger small mt-1">
+            <i class="fas fa-exclamation-circle"></i>
+            @if (addUserForm.controls['password'].errors?.['required']) {
+              La contraseña es obligatoria.
+            }
+            @if (addUserForm.controls['password'].errors?.['minlength']) {
+              La contraseña debe tener al menos 8 caracteres.
+            }
+            @if (addUserForm.controls['password'].errors?.['pattern']) {
+              Debe incluir al menos una mayúscula, una minúscula y un número.
+            }
+          </div>
+        }
+      </div>      
+
+      <div class="mb-3">
         <label for="firstName" class="form-label fw-bold">Nombre</label>
         <input type="text" class="form-control" id="firstName" formControlName="firstName">
         @if (addUserForm.controls['firstName'].invalid && addUserForm.controls['firstName'].touched) {
@@ -51,6 +77,22 @@
           </div>
         }
       </div>
+
+      <div class="mb-3">
+        <label for="role" class="form-label fw-bold">Rol</label>
+        <select class="form-select" id="role" formControlName="role">
+          <option value="" disabled selected>Selecciona un rol</option> 
+          <option value="ROLE_USER">Usuario</option>
+          <option value="ROLE_ADMIN">Administrador</option>
+        </select>
+        
+        @if (addUserForm.controls['role'].invalid && addUserForm.controls['role'].touched) {
+          <div class="text-danger small mt-1">
+            <i class="fas fa-exclamation-circle"></i> Selecciona un rol.
+          </div>
+        }
+      </div>
+      
 
       <div class="d-grid">
         @if (update) {

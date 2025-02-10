@@ -8,41 +8,38 @@ import { IUsuario } from '../models/iusuario';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/api/user';
+  private userUrl = 'http://localhost:8080/api/user';
+  private adminUrl = 'http://localhost:8080/api/admin';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   // findAll() con paginacion incluida
-  getUsuarios(page: number = 1): Observable<IUsuarioResponse> {
-    return this.httpClient
-      .get<IUsuarioResponse>(`${this.apiUrl}?page=${page}&perPage=10`)
-      .pipe(
-        tap((response) => console.log('🔍 Usuarios recibidos:', response))
-      );
+  getUsuarios(page: number = 0, perPage: number = 10): Observable<IUsuarioResponse> {
+    return this.http.get<IUsuarioResponse>(`${this.userUrl}?page=${page}&perPage=${perPage}`);
   }
 
   // read(_id)
   getUsuarioById(idUsuario: number): Observable<IUsuario> {
-    return this.httpClient.get<IUsuario>(`${this.apiUrl}/${idUsuario}`);
+    return this.http.get<IUsuario>(`${this.userUrl}/${idUsuario}`);
   }
 
   // create(Usuario)
   createUser(usuario: IUsuario): Observable<IUsuario> {
-    return this.httpClient.post<IUsuario>(`${this.apiUrl}/newuser`, usuario);
+    return this.http.post<IUsuario>(`${this.adminUrl}/newuser`, usuario);
   }
 
   // update(Usuario)
   updateUsuario(usuario: IUsuario): Observable<IUsuario> {
-    return this.httpClient.put<IUsuario>(
-      `${this.apiUrl}/updateuser/${usuario.idUsuario}`,
+    return this.http.put<IUsuario>(
+      `${this.adminUrl}/updateuser/${usuario.idUsuario}`,
       usuario
     );
   }
 
   // delete(idUsuario)
   deleteUsuario(idUsuario: number): Observable<void> {
-    return this.httpClient.delete<void>(
-      `${this.apiUrl}/deleteuser/${idUsuario}`
+    return this.http.delete<void>(
+      `${this.adminUrl}/deleteuser/${idUsuario}`
     );
   }
 }
