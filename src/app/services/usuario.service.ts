@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { IUsuarioResponse } from '../models/iusuario-response';
 import { IUsuario } from '../models/iusuario';
 
@@ -8,20 +8,22 @@ import { IUsuario } from '../models/iusuario';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8080/api/user';
 
   constructor(private httpClient: HttpClient) {}
 
   // findAll() con paginacion incluida
   getUsuarios(page: number = 1): Observable<IUsuarioResponse> {
-    return this.httpClient.get<IUsuarioResponse>(
-      `${this.apiUrl}/home?page=${page}`
-    );
+    return this.httpClient
+      .get<IUsuarioResponse>(`${this.apiUrl}?page=${page}&perPage=10`)
+      .pipe(
+        tap((response) => console.log('🔍 Usuarios recibidos:', response))
+      );
   }
 
   // read(_id)
   getUsuarioById(idUsuario: number): Observable<IUsuario> {
-    return this.httpClient.get<IUsuario>(`${this.apiUrl}/user/${idUsuario}`);
+    return this.httpClient.get<IUsuario>(`${this.apiUrl}/${idUsuario}`);
   }
 
   // create(Usuario)
@@ -39,7 +41,8 @@ export class UsuarioService {
 
   // delete(idUsuario)
   deleteUsuario(idUsuario: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.apiUrl}/deleteuser/${idUsuario}`);
+    return this.httpClient.delete<void>(
+      `${this.apiUrl}/deleteuser/${idUsuario}`
+    );
   }
-  
 }

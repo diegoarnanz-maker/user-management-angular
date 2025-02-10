@@ -17,12 +17,15 @@
         <a [routerLink]="['/user', usuario.idUsuario]" class="btn usuario-btn-view btn-sm fw-bold flex-fill">
           <i class="fas fa-eye"></i> Ver
         </a>
-        <a [routerLink]="['/updateuser', usuario.idUsuario]" class="btn usuario-btn-edit btn-sm fw-bold flex-fill">
-          <i class="fas fa-edit"></i> Editar
-        </a>
-        <a class="btn usuario-btn-delete btn-sm fw-bold flex-fill" (click)="eliminarUsuario(usuario.idUsuario)">
-          <i class="fas fa-trash-alt"></i> Eliminar
-        </a>
+
+        @if (authService.isAdmin()) {
+          <a [routerLink]="['/updateuser', usuario.idUsuario]" class="btn usuario-btn-edit btn-sm fw-bold flex-fill">
+            <i class="fas fa-edit"></i> Editar
+          </a>
+          <a class="btn usuario-btn-delete btn-sm fw-bold flex-fill" (click)="eliminarUsuario(usuario.idUsuario)">
+            <i class="fas fa-trash-alt"></i> Eliminar
+          </a>
+        }
       </div>
     } @else {
       <div class="card-body p-0">
@@ -48,12 +51,14 @@
       </div>
 
       <div class="card-footer usuario-card-footer d-flex justify-content-center gap-2 px-2">
-        <a [routerLink]="['/updateuser', usuario.idUsuario]" class="btn usuario-btn-edit btn-sm fw-bold flex-fill">
-          <i class="fas fa-edit"></i> Editar
-        </a>
-        <a class="btn usuario-btn-delete btn-sm fw-bold flex-fill" (click)="eliminarUsuario(usuario.idUsuario)">
-          <i class="fas fa-trash-alt"></i> Eliminar
-        </a>
+        @if (authService.isAdmin()) {
+          <a [routerLink]="['/updateuser', usuario.idUsuario]" class="btn usuario-btn-edit btn-sm fw-bold flex-fill">
+            <i class="fas fa-edit"></i> Editar
+          </a>
+          <a class="btn usuario-btn-delete btn-sm fw-bold flex-fill" (click)="eliminarUsuario(usuario.idUsuario)">
+            <i class="fas fa-trash-alt"></i> Eliminar
+          </a>
+        }
       </div>
     }
   </div>

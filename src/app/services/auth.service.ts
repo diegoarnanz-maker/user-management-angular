@@ -1,31 +1,50 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { IUsuario } from '../models/iusuario';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { LoginResponse } from '../models/login-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/auth/login';
-  private userData: IUsuario | null = null;
+  private userData: any = null;
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: { username: string; password: string }): Observable<IUsuario> {
-    return this.http.post<IUsuario>(this.apiUrl, credentials).pipe(
+  login(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.apiUrl, { username, password }).pipe(
       tap(response => {
-        localStorage.setItem('user', JSON.stringify(response));
-        this.userData = response;
+        console.log('🔹 Respuesta del login:', response);
+
+        const userData = {
+          username: username,
+          password: password, //revisar porque no se si es seguro
+          roles: response.roles
+        };
+        localStorage.setItem('user', JSON.stringify(userData));
+      }),
+      catchError(error => {
+        console.error('❌ Error en login:', error);
+        return throwError(() => new Error('Error al iniciar sesión'));
       })
     );
   }
-
-  getUser(): IUsuario | null {
+  
+  getUser(): any {
     if (!this.userData) {
       this.userData = JSON.parse(localStorage.getItem('user') || 'null');
     }
     return this.userData;
+  }
+
+  isAdmin(): boolean {
+    return this.getUser()?.roles.includes('ROLE_ADMIN');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getUser();
   }
 
   logout() {
@@ -33,16 +52,8 @@ export class AuthService {
     this.userData = null;
   }
 
-  isAdmin(): boolean {
-    return this.getUser()?.roles.includes('ROLE_ADMIN') || false;
+  getUserRole(): string | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user).roles[0] : null;
   }
-
-  isUser(): boolean {
-    return this.getUser()?.roles.includes('ROLE_USER') || false;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getUser()?.username;
-  }
-
 }

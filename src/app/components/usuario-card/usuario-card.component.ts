@@ -3,6 +3,7 @@ import { IUsuario } from '../../models/iusuario';
 import { Router, RouterLink } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-usuario-card',
@@ -16,6 +17,7 @@ export class UsuarioCardComponent {
   @Input() detalle: boolean = false;
 
   usuarioService = inject(UsuarioService);
+  authService = inject(AuthService);
   router = inject(Router);
 
   eliminarUsuario(idUsuario: number) {

@@ -22,15 +22,14 @@ export class HomeComponent implements OnInit {
   }
 
   getUsuarios(): void {
-    this.usuarioService.getUsuarios(this.page).subscribe({
-      next: (respuesta: IUsuarioResponse) => {
-        this.usuarios = respuesta.results;
-        this.totalPages = respuesta.total_pages;
-        // console.log('Usuarios:', this.usuarios);
+    this.usuarioService.getUsuarios().subscribe({
+      next: (response) => {
+        console.log("✅ Usuarios recibidos en Angular:", response);
+        this.usuarios = response.results;
       },
       error: (error) => {
-        console.error('Error al obtener findAll:', error);
-      },
+        console.error("❌ Error al obtener usuarios:", error);
+      }
     });
   }
 
