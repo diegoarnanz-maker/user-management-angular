@@ -1,34 +1,56 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
-    <a class="navbar-brand navbar-text fw-bold border-color px-3 py-1" routerLink="/">
+    <a
+      class="navbar-brand navbar-text fw-bold border-color px-3 py-1"
+      routerLink="/"
+    >
       User Management
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        
         @if (authService.getUserRole() === 'ROLE_ADMIN') {
-          <li class="nav-item">
-            <a class="nav-link navbar-text fw-semibold px-3" routerLink="/newuser">Nuevo Usuario</a>
-          </li>
-        }
-
-        @if (!authService.isAuthenticated()) {
-          <li class="nav-item">
-            <a class="nav-link navbar-text fw-semibold px-3" routerLink="/login">Iniciar sesión</a>
-          </li>
+        <li class="nav-item">
+          <a
+            class="nav-link navbar-text fw-semibold px-3"
+            routerLink="/newuser"
+          >
+            Nuevo Usuario
+          </a>
+        </li>
+        } @if (!authService.isAuthenticated()) {
+        <li class="nav-item">
+          <a class="nav-link navbar-text fw-semibold px-3" routerLink="/login">
+            Iniciar sesión
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link navbar-text fw-semibold px-3"
+            routerLink="/register"
+          >
+            Registrarse
+          </a>
+        </li>
         }
       </ul>
 
       @if (authService.isAuthenticated()) {
-        <div class="user-info px-3 py-1 rounded">
-          <span class="navbar-text fw-semibold username-text">
-            {{ authService.getUsername() | uppercase }} |
-          </span>
-          <a class="nav-link fw-semibold logout-text" (click)="logout()"> Cerrar sesión</a>
-        </div>
+      <div class="user-info px-3 py-1 rounded">
+        <span class="navbar-text fw-semibold username-text">
+          {{ authService.getUsername() | uppercase }} |
+        </span>
+        <a class="nav-link fw-semibold logout-text" (click)="logout()">
+          Cerrar sesión
+        </a>
+      </div>
       }
     </div>
   </div>

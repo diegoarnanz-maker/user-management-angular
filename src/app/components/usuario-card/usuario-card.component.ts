@@ -35,7 +35,9 @@ export class UsuarioCardComponent {
         this.usuarioService.deleteUsuario(idUsuario).subscribe({
           next: () => {
             Swal.fire('Eliminado', 'El usuario ha sido eliminado.', 'success');
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home']).then(() => {
+              window.location.reload();
+            });
           },
           error: (error) => {
             console.error('Error al eliminar usuario:', error);

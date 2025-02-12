@@ -48,10 +48,6 @@
     color: var(--warning);
   }
   
-  .usuario-text-danger {
-    color: var(--danger);
-  }
-  
   .usuario-text-secondary {
     color: var(--secondary);
   }

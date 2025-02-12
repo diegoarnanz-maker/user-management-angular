@@ -7,7 +7,7 @@
     --info: #beb2c8;
     --light: #d7d6d6;
     --dark: #2c2c2c;
-  
+
     --background-color: #f9fafb;
     --card-background: #ffffff;
     --navbar-background: var(--primary);
@@ -15,4 +15,3 @@
     --text-muted: #888888;
     --link-color: var(--secondary);
 }
-

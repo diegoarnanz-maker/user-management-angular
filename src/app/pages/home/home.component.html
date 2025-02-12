@@ -1,5 +1,20 @@
 <div class="container mt-4">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+  @if(authService.isAdmin()) {
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="fw-bold text-uppercase py-2 admin-title m-0">
+        <i class="fas fa-cogs me-2"></i> Panel Administrador
+      </h2>
+      <a class="btn btn-primary btn-sm fw-semibold" routerLink="/newuser">
+        <i class="fas fa-user-plus me-1"></i> Nuevo Usuario
+      </a>
+    </div>
+} @else {
+    <h2 class="fw-bold text-uppercase py-2 user-title m-0">
+      <i class="fas fa-users me-2"></i> Listado Usuarios
+    </h2>
+}
+  
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-3">
     @for (usuario of usuarios; track $index) {
       <div class="col d-flex">
         <app-usuario-card class="w-100" [usuario]="usuario"></app-usuario-card>

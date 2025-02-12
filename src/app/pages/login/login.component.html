@@ -5,24 +5,44 @@
     <form (ngSubmit)="onLogin()">
       <div class="mb-3">
         <label for="username" class="form-label login-label">Usuario</label>
-        <input type="text" id="username" class="form-control login-input" [(ngModel)]="username" name="username" required>
+        <input
+          type="text"
+          id="username"
+          class="form-control login-input"
+          [(ngModel)]="username"
+          name="username"
+          required
+        />
       </div>
 
       <div class="mb-3">
         <label for="password" class="form-label login-label">Contraseña</label>
-        <input type="password" id="password" class="form-control login-input" [(ngModel)]="password" name="password" required>
+        <input
+          type="password"
+          id="password"
+          class="form-control login-input"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
       </div>
 
       <button type="submit" class="btn login-btn w-100" [disabled]="loading">
         @if(loading) {
-          <span class="spinner-border spinner-border-sm"></span>
-        }
-        Iniciar Sesión
+        <span class="spinner-border spinner-border-sm"></span>
+        } Iniciar Sesión
       </button>
 
       @if(errorMessage) {
-        <div class="alert login-error mt-3">{{ errorMessage }}</div>
+      <div class="alert login-error mt-3">{{ errorMessage }}</div>
       }
     </form>
+
+    <div class="text-center mt-3 login-container">
+      <span class="text-register">¿No tienes cuenta?</span>
+      <a routerLink="/register" class="btn register-btn btn-sm ms-2 fw-bold"
+        >Registrarse</a
+      >
+    </div>
   </div>
 </div>

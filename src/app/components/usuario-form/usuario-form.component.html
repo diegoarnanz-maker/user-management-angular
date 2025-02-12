@@ -78,20 +78,22 @@
         }
       </div>
 
-      <div class="mb-3">
-        <label for="role" class="form-label fw-bold">Rol</label>
-        <select class="form-select" id="role" formControlName="role">
-          <option value="" disabled selected>Selecciona un rol</option> 
-          <option value="ROLE_USER">Usuario</option>
-          <option value="ROLE_ADMIN">Administrador</option>
-        </select>
-        
-        @if (addUserForm.controls['role'].invalid && addUserForm.controls['role'].touched) {
-          <div class="text-danger small mt-1">
-            <i class="fas fa-exclamation-circle"></i> Selecciona un rol.
-          </div>
-        }
-      </div>
+      @if(isAdminMode) {
+        <div class="mb-3">
+          <label for="role" class="form-label fw-bold">Rol</label>
+          <select class="form-select" id="role" formControlName="role">
+            <option value="" disabled selected>Selecciona un rol</option> 
+            <option value="ROLE_USER">Usuario</option>
+            <option value="ROLE_ADMIN">Administrador</option>
+          </select>
+          
+          @if (addUserForm.controls['role'].invalid && addUserForm.controls['role'].touched) {
+            <div class="text-danger small mt-1">
+              <i class="fas fa-exclamation-circle"></i> Selecciona un rol.
+            </div>
+          }
+        </div>
+      }
       
 
       <div class="d-grid">

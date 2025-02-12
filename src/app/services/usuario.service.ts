@@ -14,13 +14,25 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   // findAll() con paginacion incluida
-  getUsuarios(page: number = 0, perPage: number = 10): Observable<IUsuarioResponse> {
-    return this.http.get<IUsuarioResponse>(`${this.userUrl}?page=${page}&perPage=${perPage}`);
+  getUsuarios(
+    page: number = 0,
+    perPage: number = 10
+  ): Observable<IUsuarioResponse> {
+    return this.http.get<IUsuarioResponse>(
+      `${this.userUrl}?page=${page}&perPage=${perPage}`
+    );
   }
 
   // read(_id)
   getUsuarioById(idUsuario: number): Observable<IUsuario> {
     return this.http.get<IUsuario>(`${this.userUrl}/${idUsuario}`);
+  }
+
+  // readByUsername(username)
+  getUsuarioByUsername(username: string): Observable<IUsuario> {
+    return this.http.get<IUsuario>(
+      `${this.userUrl}/findByUsername/${username}`
+    );
   }
 
   // create(Usuario)
@@ -38,8 +50,6 @@ export class UsuarioService {
 
   // delete(idUsuario)
   deleteUsuario(idUsuario: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.adminUrl}/deleteuser/${idUsuario}`
-    );
+    return this.http.delete<void>(`${this.adminUrl}/deleteuser/${idUsuario}`);
   }
 }

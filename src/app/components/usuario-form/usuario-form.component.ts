@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -8,6 +8,7 @@ import {
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -17,13 +18,16 @@ import Swal from 'sweetalert2';
   styleUrl: './usuario-form.component.css',
 })
 export class UsuarioFormComponent {
+  @Input() isAdminMode: boolean = false;
+  @Input() isRegisterMode: boolean = false;
+
   addUserForm!: FormGroup;
   usuarioService = inject(UsuarioService);
+  authService = inject(AuthService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
   idUsuario?: number;
-
   update: boolean = false;
 
   constructor() {
@@ -35,7 +39,7 @@ export class UsuarioFormComponent {
       ]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.minLength(6),
       ]),
       firstName: new FormControl('', [
         Validators.required,
@@ -49,13 +53,14 @@ export class UsuarioFormComponent {
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       image: new FormControl('', [Validators.required]),
-      role: new FormControl('', [Validators.required]),
+      role: new FormControl(
+        this.isAdminMode ? '' : 'ROLE_USER',
+        this.isAdminMode ? [Validators.required] : []
+      ),
     });
 
-    //Busco si hay id en la URL para poder pasar los datos en caso de ser updateuser
     this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
     if (this.idUsuario) {
-      //Si existe activo el update para el control flow en el template
       this.update = true;
       this.usuarioService.getUsuarioById(this.idUsuario).subscribe({
         next: (usuario) => {
@@ -76,19 +81,13 @@ export class UsuarioFormComponent {
 
     let usuario = { ...this.addUserForm.value };
 
-    if (usuario.role) {
-      usuario.roles = [usuario.role];
-      delete usuario.role;
-    } else {
-      usuario.roles = [];
-    }
-
-    // console.log('Datos enviados al backend:', usuario);
+    usuario.roles = this.isAdminMode ? [usuario.role] : ['ROLE_USER'];
+    delete usuario.role;
 
     if (this.idUsuario) {
       usuario.idUsuario = this.idUsuario;
       this.usuarioService.updateUsuario(usuario).subscribe({
-        next: (response) => {
+        next: () => {
           Swal.fire({
             icon: 'success',
             title: 'Usuario actualizado',
@@ -111,18 +110,52 @@ export class UsuarioFormComponent {
         },
       });
     } else {
-      this.usuarioService.createUser(usuario).subscribe({
-        next: (response) => {
-          console.log('Usuario creado:', response);
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuario creado',
-            text: 'El usuario ha sido creado con éxito.',
-            confirmButtonColor: 'var(--secondary)',
-            confirmButtonText: 'Aceptar',
-          }).then(() => {
-            this.router.navigate(['/home']);
-          });
+      const endpoint = this.isRegisterMode
+        ? this.authService.register(usuario)
+        : this.usuarioService.createUser(usuario);
+
+      endpoint.subscribe({
+        next: () => {
+          if (this.isRegisterMode) {
+            
+            this.authService
+              .login(usuario.username, usuario.password)
+              .subscribe({
+                next: () => {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'Te has registrado con éxito.',
+                    confirmButtonColor: 'var(--secondary)',
+                    confirmButtonText: 'Aceptar',
+                  }).then(() => {
+                    this.router.navigate(['/home']);
+                  });
+                },
+                error: (error) => {
+                  console.error('Error en login automático:', error);
+                  Swal.fire({
+                    icon: 'warning',
+                    title: 'Registro exitoso, pero error en login',
+                    text: 'Tu cuenta ha sido creada, pero inicia sesión manualmente.',
+                    confirmButtonColor: 'var(--warning)',
+                    confirmButtonText: 'Aceptar',
+                  }).then(() => {
+                    this.router.navigate(['/login']);
+                  });
+                },
+              });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'Usuario creado',
+              text: 'El usuario ha sido creado con éxito.',
+              confirmButtonColor: 'var(--secondary)',
+              confirmButtonText: 'Aceptar',
+            }).then(() => {
+              this.router.navigate(['/home']);
+            });
+          }
         },
         error: (error) => {
           console.error('Error al crear usuario:', error);

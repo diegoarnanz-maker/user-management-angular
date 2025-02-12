@@ -3,11 +3,16 @@ import { IUsuario } from '../../models/iusuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioCardComponent } from '../../components/usuario-card/usuario-card.component';
 import { IUsuarioResponse } from '../../models/iusuario-response';
+import { AuthService } from '../../services/auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [UsuarioCardComponent],
+  imports: [
+    UsuarioCardComponent,
+    RouterModule
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -17,6 +22,7 @@ export class HomeComponent implements OnInit {
   totalPages: number = 1;
   perPage: number = 9;
   usuarioService = inject(UsuarioService);
+  authService = inject(AuthService);
 
   ngOnInit(): void {
     this.getUsuarios();
@@ -25,7 +31,7 @@ export class HomeComponent implements OnInit {
   getUsuarios(): void {
     this.usuarioService.getUsuarios(this.page, this.perPage).subscribe({
       next: (response: IUsuarioResponse) => {
-        console.log('Usuarios recibidos en Angular:', response);
+        // console.log('Usuarios recibidos en Angular:', response);
         this.usuarios = response.results;
         this.totalPages = response.total_pages;
       },
