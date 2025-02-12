@@ -13,14 +13,15 @@
       </div>
 
       <div class="mb-3">
-        <label for="password" class="form-label fw-bold">Contraseña</label>
-        <input 
-          type="password" 
-          class="form-control" 
-          id="password" 
-          formControlName="password"
-          placeholder="Introduce la contraseña"
-        >
+        @if(!update) {
+          <label for="password" class="form-label fw-bold">Contraseña</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            formControlName="password"
+          >
+        }
       
         @if (addUserForm.controls['password'].invalid && addUserForm.controls['password'].touched) {
           <div class="text-danger small mt-1">

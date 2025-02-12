@@ -78,14 +78,19 @@ export class UsuarioFormComponent {
       console.log('Formulario inválido:', this.addUserForm.errors);
       return;
     }
-
+  
     let usuario = { ...this.addUserForm.value };
-
+  
     usuario.roles = this.isAdminMode ? [usuario.role] : ['ROLE_USER'];
     delete usuario.role;
-
+  
     if (this.idUsuario) {
       usuario.idUsuario = this.idUsuario;
+  
+      if (!usuario.password || usuario.password.trim() === '') {
+        delete usuario.password;
+      }
+  
       this.usuarioService.updateUsuario(usuario).subscribe({
         next: () => {
           Swal.fire({
@@ -113,11 +118,10 @@ export class UsuarioFormComponent {
       const endpoint = this.isRegisterMode
         ? this.authService.register(usuario)
         : this.usuarioService.createUser(usuario);
-
+  
       endpoint.subscribe({
         next: () => {
           if (this.isRegisterMode) {
-            
             this.authService
               .login(usuario.username, usuario.password)
               .subscribe({
@@ -169,5 +173,5 @@ export class UsuarioFormComponent {
         },
       });
     }
-  }
+  }  
 }
